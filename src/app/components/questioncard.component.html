@@ -1,35 +1,44 @@
 
-<div class="absolute top-0 right-0 left-0 bottom-0 bg-transparent">
-  <div class="flex justify-center mt-6">
-    <div class="bg-white rounded-3xl relative min-w-80 w-11/12 h-96">
-      <div class="absolute inset-0 w-full h-96 opacity-70">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" class="w-full h-full">
-          <defs>
-            <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="80" />
-            </filter>
-          </defs>
-          <circle cx="700" cy="300" r="250" fill="#e0d5ff" filter="url(#blur)" opacity="0.7"/>
-          <circle cx="400" cy="500" r="300" fill="#d5ffe0" filter="url(#blur)" opacity="0.6"/>
-          <circle cx="600" cy="700" r="280" fill="#ffe0d5" filter="url(#blur)" opacity="0.7"/>
-        </svg>
-      </div>
-
-      <div class="absolute inset-0 w-full h-fit">
-        <div class="flex flex-row justify-between items-center mb-5 px-4">
-          <div></div>
-          <h1 class="gradient-text text-center px-3">
-            <span class="text-4xl">Q</span>
-            <span class="text-3xl">uizme</span>
-          </h1>
-          <div role="button" class="px-2 py-1 transition-all rounded-lg hover:bg-gray-100">
-            <ng-icon size="18" name="featherX"></ng-icon>
+  @if (showCard) {
+    <div class="absolute top-0 right-0 left-0 bottom-0 bg-transparent lg:flex lg:justify-center lg:items-center lg:flex-col">
+      <div class="flex justify-center mt-6 lg:mt-0 lg:w-full">
+        <div class="bg-white rounded-3xl relative min-w-80 w-11/12 h-[23rem] lg:h-96 {{pingOut?'animate-ping':'animate-pingin'}}">
+          <div class="absolute inset-0 w-full h-[23rem] lg:h-96 opacity-70">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" class="w-full h-full">
+              <defs>
+                <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur in="SourceGraphic" stdDeviation="80" />
+                </filter>
+              </defs>
+              <circle cx="700" cy="300" r="250" fill="#e0d5ff" filter="url(#blur)" opacity="0.7"/>
+              <circle cx="400" cy="500" r="300" fill="#d5ffe0" filter="url(#blur)" opacity="0.6"/>
+              <circle cx="600" cy="700" r="280" fill="#ffe0d5" filter="url(#blur)" opacity="0.7"/>
+            </svg>
           </div>
+
+          <div class="absolute inset-0 w-full h-full px-4 flex justify-between flex-col">
+            <div class="flex flex-row justify-between items-center">
+              <div></div>
+              <h1 class="gradient-text text-center px-3 ml-7">
+                <span class="text-4xl">Q</span>
+                <span class="text-3xl">uizme</span>
+              </h1>
+              <div (click)="hideQuestionCard()" role="button" class="px-2 py-1 transition-all rounded-lg hover:bg-gray-100">
+                <ng-icon size="18" name="featherX"></ng-icon>
+              </div>
+            </div>
+
+            <div [innerHTML]="getQuestion()" class="font-hedvig text-center text-gray-700 text-3xl lg:text-4xl px-4 mt-[-4rem]"></div>
+
+            <div>
+                <!-- Hello -->
+            </div>
+          </div>
+
+
         </div>
-
       </div>
-
-
     </div>
-  </div>
-</div>
+  }
+
+
