@@ -8,8 +8,11 @@
     <div
       class="w-full h-full bg-[url('/assets/images/hero1-comp.jpg')] bg-center bg-no-repeat bg-cover">
       <div class="flex justify-center items-center flex-col h-full bg-black bg-opacity-65">
-        @if (!quizOn) {
-          <div class="lg:absolute top-0 left-0 right-0 lg:mr-[50%] w-full mt-5 mb-9 lg:mb-0">
+        <!-- @if (!quizOn()) { -->
+          <div
+            class="lg:absolute top-0 left-0 right-0 lg:mr-[50%] w-full mt-5 mb-9 lg:mb-0 {{isVisible?'opacity-100':'opacity-0'}} transition-opacity duration-500 ease-in"
+
+          >
             <div class="flex flex-row justify-start items-center mb-7 ml-5">
               <h1 class="gradient-text text-center">
                 <span class="text-5xl">Q</span>
@@ -23,18 +26,22 @@
                   </h2>
               </div>
           </div>
-          <div class="relative w-full flex justify-center mb-7">
+          <div class="relative w-full flex justify-center mb-7 {{isVisible?'opacity-100':'opacity-0'}} transition-opacity duration-500 ease-in">
             <select class="block w-11/12 bg-white text-black rounded-lg px-5 py-4 shadow-xl border-gray-600 outline-none">
               <option selected value="music">Select quiz topic</option>
               <option value="music">Entertainment - Music</option>
             </select>
           </div>
-          <button (click)="setQuizStatus(true)" class="gradient-back mb-5 lg:mb-0 block w-11/12 text-white font-bold text-lg rounded-3xl px-5 py-3 shadow-xl border-gray-600 outline-none">
+          <button (click)="setQuizStatus(true)"
+            class="gradient-back mb-5 lg:mb-0 block w-11/12 text-white font-bold
+            text-lg rounded-3xl px-5 py-3 shadow-xl border-gray-600 outline-none
+            {{isVisible?'opacity-100':'opacity-0'}} transition-opacity duration-500 ease-in"
+          >
             Start quiz
           </button>
-        }
+        <!-- } -->
 
-        <div class="lg:absolute bottom-0 left-0 right-0 mb-5 mx-5">
+        <div class="lg:absolute bottom-0 left-0 right-0 mb-5 mx-5 {{false&&quizOn()&&'mt-[24.63rem] lg:mt-0'}}">
           <div style="font-size: 10px;" class="text-center text-gray-300 text-xs">
               <div>Text your knowledge on matters around you.</div>
               <div>
@@ -46,9 +53,9 @@
       </div>
       </div>
     </div>
-    @if (quizOn) {
-      <question-card />
-    }
+    <!-- @if (quizOn()) { -->
+      <question-card [question]="currentQuestion()" (onQuestionsLoad)="onQuestionsLoaded($event)" (beforeClose)="onDismisQuizCard()" [showCard]="quizOn()" (hideQuestionCard)="setQuizStatus(false)" />
+    <!-- } -->
 
   </div>
   <div class="hidden lg:block lg:ml-[50%] flex-1 relative">
@@ -69,13 +76,14 @@
     </div>
   </div>
   <div class="lg:ml-[50%] flex-1">
-    <div class="lg:fixed top-0 bottom-0 right-0 lg:w-1/2 lg:overflow-y-auto">
+    <div class="lg:fixed top-0 bottom-0 right-0 lg:w-1/2 lg:overflow-y-auto {{quizOn()&&'hidden'}}">
       <div class="max-w-6xl mt-6 flex flex-row flex-wrap justify-around relative">
         @for (item of sections; track item.title) {
           <home-card [title]="item.title" [caption]="item.caption" />
         }
       </div>
     </div>
+    <answer-card [question]="currentQuestion()" (onNextQuestion)="getNextQuestion()" [dismis]="quizOn()" [initiateDismis]="dismisAnswerCard"  />
   </div>
 </main>
 
