@@ -83,7 +83,7 @@
         }
       </div>
     </div>
-    <answer-card [question]="currentQuestion()" (onNextQuestion)="getNextQuestion()" [dismis]="quizOn()" [initiateDismis]="dismisAnswerCard"  />
+    <answer-card [questionsData]="questionsData" [question]="currentQuestion()" (onNextQuestion)="getNextQuestion()" [dismis]="quizOn()" [initiateDismis]="dismisAnswerCard"  />
   </div>
 </main>
 

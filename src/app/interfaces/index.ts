@@ -6,3 +6,9 @@ export interface Question {
   correct_answer: string;
   incorrect_answers: string[];
 }
+
+export interface QuestionsData{
+  isLastQuestion: boolean;
+  currentQuestionNumber: number;
+  totalQuestions: number;
+}

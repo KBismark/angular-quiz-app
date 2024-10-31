@@ -4,7 +4,7 @@ import { HomeCard } from './components/homecard.component';
 import { QuestionCard } from './components/questioncard.component';
 import { CommonModule } from '@angular/common';
 import { AnswerCard } from './components/answercard.component';
-import { Question } from './interfaces';
+import { Question, QuestionsData } from './interfaces';
 
 @Component({
   selector: 'app-root',
@@ -34,10 +34,15 @@ export class AppComponent {
   onQuestionsLoaded(questions: Question[]){
     this.nextQuestionNumber = 0;
     this.lastQuestionShowed = false;
+    this.questionsData = {
+      totalQuestions: questions.length,
+      isLastQuestion: this.lastQuestionShowed,
+      currentQuestionNumber: this.nextQuestionNumber
+    }
     this.questionsSignal.set(questions);
     this.getNextQuestion();
   }
-
+  questionsData:QuestionsData = {} as QuestionsData;
   currentQuestion = signal<Question|null>(null);;
   lastQuestionShowed = false
   nextQuestionNumber = 0;
@@ -48,6 +53,11 @@ export class AppComponent {
     // Only one unanswered question remaining
     if(this.nextQuestionNumber>=questions.length){
       this.lastQuestionShowed = true;
+    }
+    this.questionsData = {
+      isLastQuestion: this.lastQuestionShowed,
+      totalQuestions: this.questionsData.totalQuestions,
+      currentQuestionNumber: this.nextQuestionNumber
     }
   }
 
