@@ -1,4 +1,72 @@
+<div *ngIf="dismis" class="flex flex-col justify-between lg:fixed top-0 bottom-0 right-0 lg:w-1/2 lg:mr-[-2rem] lg:overflow-y-auto {{!initiateDismis?'animate-slideleft':'animate-slideright'}} shadow-hanging border-l my-4 lg:rounded-3xl rounded-r-none">
 
-<div *ngIf="dismis" class="lg:fixed top-0 bottom-0 right-0 lg:w-1/2 lg:mr-[-2rem] lg:overflow-y-auto {{!initiateDismis?'animate-slideleft':'animate-slideright'}} shadow-hanging border-l my-4 rounded-3xl rounded-r-none">
+  <div class="flex justify-between flex-row items-center mt-6 px-4 pr-4 lg:pr-12 pb-12 lg:pb-0">
 
+    <div class="flex items-center">
+
+      <div class="flex items-center mr-4">
+        <div role="checkbox" class="cursor-pointer w-12 h-12 hover:shadow-inner transition-all bg-red-100 border-red-200 border-2 rounded-md mr-3 flex justify-center items-center">
+          <ng-icon size="24" name="featherX" class="text-red-600" />
+        </div>
+        <div class="font-hedvig text-gray-700 text-lg lg:text-2xl">{{wrongAnswers}}</div>
+      </div>
+
+      <div class="flex items-center mr-4">
+        <div role="checkbox" class="cursor-pointer w-12 h-12 hover:shadow-inner transition-all bg-green-100 border-green-200 border-2 rounded-md mr-3 flex justify-center items-center">
+          <ng-icon size="24" name="featherCheck" class="text-green-600" />
+        </div>
+        <div class="font-hedvig text-gray-700 text-lg lg:text-2xl">{{correctAnswers}}</div>
+      </div>
+
+    </div>
+    <div class="font-hedvig text-gray-700 text-lg lg:text-2xl"><span class="text-gray-500">{{questionsData()?.currentQuestionNumber}}</span>/{{questionsData()?.totalQuestions}}</div>
+
+  </div>
+  <div *ngIf="question()" class="px-4">
+
+    @for (item of getAnswerOptions(); track item) {
+      <div class="flex items-center pb-3">
+        <div (click)="selectAnswer(item)" role="checkbox"
+          class="cursor-pointer {{answerConfirmed?item===getCorrectAnswer()?'bg-green-100 border-green-200':'bg-red-100 border-red-200':'hover:bg-gray-100 border-gray-200'}}
+          {{answerConfirmed&&selectedAnswer===item&&'ml-2 lg:ml-3'}} w-12 h-12 hover:shadow-inner
+          transition-all border-2 rounded-md mr-3 flex justify-center items-center"
+        >
+          @if (answerConfirmed) {
+            @if (item===getCorrectAnswer()) {
+              <ng-icon size="18" name="featherCheck" class="text-green-600" />
+            }
+            @else {
+              <ng-icon size="18" name="featherX" class="text-red-600" />
+            }
+          }
+          @else {
+            <ng-icon *ngIf="selectedAnswer===item" size="18" name="featherCheck" />
+          }
+        </div>
+        <div [innerHTML]="bypassHTMLSecurity(item)" class="font-hedvig text-gray-700 text-3xl lg:text-4xl"></div>
+      </div>
+    }
+  </div>
+  <div class="flex justify-start px-4 pr-4 lg:pr-12 items-center pt-12 lg:pt-0 pb-6">
+    <button
+      *ngIf="!answerConfirmed"
+      (click)="confirmAnswer()"
+      class="gradient-back mb-5 lg:mb-0 block text-white font-bold
+      text-lg rounded-3xl px-5 py-3 shadow-xl border-gray-600 outline-none
+      transition-opacity duration-500 ease-in"
+    >
+      Confirm answer
+    </button>
+
+    <button
+      *ngIf="answerConfirmed"
+    (click)="onNextQuestion()"
+      class="gradient-back mb-5 lg:mb-0 block text-white font-bold
+      text-lg rounded-3xl px-7 py-3 shadow-xl border-gray-600 outline-none
+      transition-opacity duration-500 ease-in"
+    >
+      Next question
+    </button>
+
+  </div>
 </div>
