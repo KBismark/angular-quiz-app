@@ -78,14 +78,100 @@
   }
 
   .gradient-back {
-    /* padding-bottom: 7px; */
     background: linear-gradient(
-      90deg,
-      var(--orange-red) 0%,
-      var(--vivid-pink) 50%,
-      var(--electric-violet) 100%
+        90deg,
+        var(--orange-red) 0%,
+        var(--vivid-pink) 50%,
+        var(--electric-violet) 100%
     );
-  }
+    background-size: 200% 100%;
+    background-position: 100% 0;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+
+    /* Material Design style shadow */
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,0.2),
+                0 2px 2px 0 rgba(0,0,0,0.14),
+                0 1px 5px 0 rgba(0,0,0,0.12);
+    transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                background 0.3s ease;
+}
+
+button.gradient-back::after,
+.as-button.gradient-back::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0);
+    transition: background 0.2s;
+}
+
+button.gradient-back:hover,
+.as-button.gradient-back:hover {
+    animation: spreadGradient 1.5s ease forwards;
+    box-shadow: 0 2px 4px -1px rgba(0,0,0,0.2),
+                0 4px 5px 0 rgba(0,0,0,0.14),
+                0 1px 10px 0 rgba(0,0,0,0.12);
+}
+
+/* Active/Pressed state */
+button.gradient-back:active,
+.as-button.gradient-back:active {
+    box-shadow: 0 5px 5px -3px rgba(0,0,0,0.2),
+    0 8px 10px 1px rgba(0,0,0,0.14),
+    0 3px 14px 2px rgba(0,0,0,0.12);
+}
+
+button.gradient-back:active::after,
+.as-button.gradient-back:active::after {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+@keyframes spreadGradient {
+    0% {
+        background-size: 100% 100%;
+        background-position: 0 0;
+    }
+    50% {
+        background-size: 200% 100%;
+        background-position: 0 0;
+    }
+    100% {
+        background-size: 100% 100%;
+        background-position: 0 0;
+        background-image: linear-gradient(
+          120deg,
+          var(--orange-red) 0%,
+          var(--vivid-pink) 40%,
+          var(--electric-violet) 100%
+        );
+    }
+}
+
+/* For smoother transition when hover ends */
+button.gradient-back:not(:hover),
+.as-button.gradient-back:not(:hover) {
+    animation: shrinkGradient 0.5s ease forwards;
+}
+
+@keyframes shrinkGradient {
+    from {
+        background-size: 200% 100%;
+    }
+    to {
+        background-size: 100% 100%;
+        background-image: linear-gradient(
+            90deg,
+            var(--orange-red) 0%,
+            var(--vivid-pink) 50%,
+            var(--electric-violet) 100%
+        );
+    }
+}
 
 
 }
