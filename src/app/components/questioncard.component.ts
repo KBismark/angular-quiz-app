@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Injectable, input, output, OnInit, signal, computed, Input } from '@angular/core';
+import { Component, Injectable, input, output, OnInit, signal, computed, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { featherX } from '@ng-icons/feather-icons';
 import { catchError, map } from 'rxjs/operators';
@@ -22,7 +22,7 @@ interface QuizApiResponse {
   templateUrl: './questioncard.component.html'
 })
 @Injectable({ providedIn: 'root' })
-export class QuestionCard implements OnInit {
+export class QuestionCard implements OnInit, OnChanges {
   // Signals for state management
   private questionsSignal = signal<Question[]>([]);
   private loadingSignal = signal(false);
@@ -45,6 +45,14 @@ export class QuestionCard implements OnInit {
     this.loadQuestions();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    const question = changes['question'];
+    if(question&&!question.currentValue){
+      this.loadQuestions();
+    }
+
+  }
+
   getQuestion(){
     const question = this.question();
     return this.sanitizer.bypassSecurityTrustHtml(
@@ -56,7 +64,7 @@ export class QuestionCard implements OnInit {
     if(this.question()) return;
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
-
+    // alert('here')
     this.http.get<QuizApiResponse>('https://opentdb.com/api.php?amount=10')
       .pipe(
         map(response => {
@@ -79,7 +87,7 @@ export class QuestionCard implements OnInit {
           }
           this.loadingSignal.set(false);
         },
-        error: () => {
+        error: (er) => {
           this.loadingSignal.set(false);
         }
       });

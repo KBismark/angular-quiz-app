@@ -8,14 +8,14 @@
         <div role="checkbox" class="cursor-pointer w-12 h-12 hover:shadow-inner transition-all bg-red-100 border-red-200 border-2 rounded-md mr-3 flex justify-center items-center">
           <ng-icon size="24" name="featherX" class="text-red-600" />
         </div>
-        <div class="font-hedvig text-gray-700 text-lg lg:text-2xl">{{wrongAnswers}}</div>
+        <div class="font-hedvig text-gray-700 text-lg lg:text-2xl {{updateWrongAnswer&&'animate-pingin'}}">{{wrongAnswers}}</div>
       </div>
 
       <div class="flex items-center mr-4">
         <div role="checkbox" class="cursor-pointer w-12 h-12 hover:shadow-inner transition-all bg-green-100 border-green-200 border-2 rounded-md mr-3 flex justify-center items-center">
           <ng-icon size="24" name="featherCheck" class="text-green-600" />
         </div>
-        <div class="font-hedvig text-gray-700 text-lg lg:text-2xl">{{correctAnswers}}</div>
+        <div class="font-hedvig text-gray-700 text-lg lg:text-2xl {{updateCorrectAnswer&&'animate-pingin'}}">{{correctAnswers}}</div>
       </div>
 
     </div>
@@ -26,22 +26,24 @@
 
     @for (item of getAnswerOptions(); track item) {
       <div class="flex items-center pb-3">
-        <div (click)="selectAnswer(item)" role="checkbox"
-          class="cursor-pointer {{answerConfirmed?item===getCorrectAnswer()?'bg-green-100 border-green-200':'bg-red-100 border-red-200':'hover:bg-gray-100 border-gray-200'}}
-          {{answerConfirmed&&selectedAnswer===item&&'ml-2 lg:ml-3'}} w-12 h-12 hover:shadow-inner
-          transition-all border-2 rounded-md mr-3 flex justify-center items-center"
-        >
-          @if (answerConfirmed) {
-            @if (item===getCorrectAnswer()) {
-              <ng-icon size="18" name="featherCheck" class="text-green-600" />
+        <div class="flex justify-center items-center">
+          <div (click)="selectAnswer(item)" role="checkbox"
+            class="cursor-pointer {{answerConfirmed?item===getCorrectAnswer()?'bg-green-100 border-green-200':'bg-red-100 border-red-200':'hover:bg-gray-100 border-gray-200'}}
+            {{answerConfirmed&&selectedAnswer===item&&'ml-2 lg:ml-3'}} w-12 h-12 hover:shadow-inner
+            transition-all border-2 rounded-md mr-3 flex justify-center items-center"
+          >
+            @if (answerConfirmed) {
+              @if (item===getCorrectAnswer()) {
+                <ng-icon size="18" name="featherCheck" class="text-green-600" />
+              }
+              @else {
+                <ng-icon size="18" name="featherX" class="text-red-600" />
+              }
             }
             @else {
-              <ng-icon size="18" name="featherX" class="text-red-600" />
+              <ng-icon *ngIf="selectedAnswer===item" size="18" name="featherCheck" />
             }
-          }
-          @else {
-            <ng-icon *ngIf="selectedAnswer===item" size="18" name="featherCheck" />
-          }
+          </div>
         </div>
         <div [innerHTML]="bypassHTMLSecurity(item)" class="font-hedvig text-gray-700 text-3xl lg:text-4xl"></div>
       </div>
@@ -60,7 +62,8 @@
 
     <button
       *ngIf="answerConfirmed"
-    (click)="onNextQuestion()"
+      (click)="onNextQuestion()"
+      [disabled]="showResults"
       class="gradient-back mb-5 lg:mb-0 block text-white font-bold
       text-lg rounded-3xl px-7 py-3 shadow-xl border-gray-600 outline-none
       transition-opacity duration-500 ease-in"
@@ -70,3 +73,56 @@
 
   </div>
 </div>
+<div *ngIf="showResults"  class="fixed top-0 bottom-0 right-0 left-0 overflow-y-auto bg-black opacity-45 z-10">
+
+</div>
+<div *ngIf="showResults"  class="flex flex-col justify-center items-center fixed top-0 bottom-0 right-0 left-0 z-20">
+  <!-- *ngIf="questionsData()?.isLastQuestion" -->
+  <div class="bg-white rounded-3xl relative w-72 lg:w-[35rem] h-72 lg:h-96 animate-pingin">
+    <div class="absolute inset-0 w-full h-72 lg:h-96 opacity-70">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" class="w-full h-full">
+        <defs>
+          <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="80" />
+          </filter>
+        </defs>
+        <circle cx="700" cy="300" r="250" fill="#e0d5ff" filter="url(#blur)" opacity="0.7"/>
+        <circle cx="400" cy="500" r="300" fill="#d5ffe0" filter="url(#blur)" opacity="0.6"/>
+        <circle cx="600" cy="700" r="280" fill="#ffe0d5" filter="url(#blur)" opacity="0.7"/>
+      </svg>
+    </div>
+    <div class="absolute inset-0 w-full h-72 lg:h-96 px-4 flex justify-between flex-col">
+      <div class="flex flex-row justify-end items-cente mt-3">
+        <div role="button" class="px-2 py-1 transition-all rounded-lg hover:bg-gray-100">
+          <ng-icon size="18" name="featherX" class="mt-1"></ng-icon>
+        </div>
+      </div>
+
+      <!-- <div class="font-hedvig text-center text-gray-700 text-3xl lg:text-4xl px-4 mt-[-4rem]">
+
+      </div> -->
+      <div class="flex items-center">
+
+        <div class="flex items-center mr-4">
+          <div role="checkbox" class="cursor-pointer w-12 h-12 hover:shadow-inner transition-all bg-red-100 border-red-200 border-2 rounded-md mr-3 flex justify-center items-center">
+            <ng-icon size="24" name="featherX" class="text-red-600" />
+          </div>
+          <div class="font-hedvig text-gray-700 text-lg lg:text-2xl {{updateWrongAnswer&&'animate-pingin'}}">{{wrongAnswers}}</div>
+        </div>
+
+        <div class="flex items-center mr-4">
+          <div role="checkbox" class="cursor-pointer w-12 h-12 hover:shadow-inner transition-all bg-green-100 border-green-200 border-2 rounded-md mr-3 flex justify-center items-center">
+            <ng-icon size="24" name="featherCheck" class="text-green-600" />
+          </div>
+          <div class="font-hedvig text-gray-700 text-lg lg:text-2xl {{updateCorrectAnswer&&'animate-pingin'}}">{{correctAnswers}}</div>
+        </div>
+
+      </div>
+
+      <div>
+          <!-- Hello -->
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,4 +1,4 @@
-import { Component, computed, input, signal } from '@angular/core';
+import { Component, computed, input, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HomeCard } from './components/homecard.component';
 import { QuestionCard } from './components/questioncard.component';
@@ -17,14 +17,30 @@ import { Question, QuestionsData } from './interfaces';
 
 export class AppComponent {
   constructor(){
-    // setTimeout(() => {
-    //   this.isVisible = true;
-    // }, 500);
+    let questions:any = window.localStorage.getItem('questions');
+    if(questions){
+      try {
+        questions = JSON.parse(questions);
+        console.log(questions);
+        this.questionsSignal.set(questions.all);
+        this.currentQuestion.set(questions.all[questions.nextQuestionNumber-1])
+        this.questionsData = {
+          totalQuestions: questions.all.length,
+          isLastQuestion: this.lastQuestionShowed = questions.lastQuestionShowed,
+          currentQuestionNumber: this.nextQuestionNumber = questions.nextQuestionNumber
+        }
+
+      } catch (error) {}
+    }
   }
+
+  availableData: any = null
   // Signals for state management
   private questionsSignal = signal<Question[]>([]);
   private loadingSignal = signal(false);
   private errorSignal = signal<string | null>(null);
+
+
 
   // Computed signals for template consumption
   readonly questions = computed(() => this.questionsSignal());
@@ -47,7 +63,10 @@ export class AppComponent {
   lastQuestionShowed = false
   nextQuestionNumber = 0;
   getNextQuestion(){
-    if(this.lastQuestionShowed) return;
+    if(this.lastQuestionShowed){
+      this.currentQuestion.set(null)
+      return;
+    }
     const questions = this.questions();
     this.currentQuestion.set(questions[this.nextQuestionNumber++])
     // Only one unanswered question remaining
@@ -59,6 +78,10 @@ export class AppComponent {
       totalQuestions: this.questionsData.totalQuestions,
       currentQuestionNumber: this.nextQuestionNumber
     }
+    window.localStorage.setItem('questions', JSON.stringify({
+      all: questions, nextQuestionNumber: this.nextQuestionNumber,
+      lastQuestionShowed: this.lastQuestionShowed
+    }))
   }
 
   isVisible = true;
