@@ -73,10 +73,10 @@
 
   </div>
 </div>
-<div *ngIf="showResults"  class="fixed top-0 bottom-0 right-0 left-0 overflow-y-auto bg-black opacity-45 z-10">
+<div *ngIf="showResults&&dismis"  class="fixed top-0 bottom-0 right-0 left-0 overflow-y-auto bg-black opacity-75 z-10">
 
 </div>
-<div *ngIf="showResults"  class="flex flex-col justify-center items-center fixed top-0 bottom-0 right-0 left-0 z-20">
+<div *ngIf="showResults&&dismis"  class="flex flex-col justify-center items-center fixed top-0 bottom-0 right-0 left-0 z-20">
   <!-- *ngIf="questionsData()?.isLastQuestion" -->
   <div class="bg-white rounded-3xl relative w-72 lg:w-[35rem] h-72 lg:h-96 animate-pingin">
     <div class="absolute inset-0 w-full h-72 lg:h-96 opacity-70">
@@ -93,7 +93,7 @@
     </div>
     <div class="absolute inset-0 w-full h-72 lg:h-96 px-4 flex justify-between flex-col">
       <div class="flex flex-row justify-end items-cente mt-3">
-        <div role="button" class="px-2 py-1 transition-all rounded-lg hover:bg-gray-100">
+        <div (click)="endQuiz()" role="button" class="px-2 py-1 transition-all rounded-lg hover:bg-gray-100">
           <ng-icon size="18" name="featherX" class="mt-1"></ng-icon>
         </div>
       </div>
@@ -101,20 +101,29 @@
       <!-- <div class="font-hedvig text-center text-gray-700 text-3xl lg:text-4xl px-4 mt-[-4rem]">
 
       </div> -->
-      <div class="flex items-center">
+      <div class="flex items-center justify-center flex-col mt-[-4rem]">
+        <div class="font-hedvig text-gray-700 text-3xl lg:text-5xl text-center mb-5">Your Score</div>
 
-        <div class="flex items-center mr-4">
-          <div role="checkbox" class="cursor-pointer w-12 h-12 hover:shadow-inner transition-all bg-red-100 border-red-200 border-2 rounded-md mr-3 flex justify-center items-center">
-            <ng-icon size="24" name="featherX" class="text-red-600" />
+        <div>
+          <div class="flex items-center mr-4 mb-5">
+            <div>
+              <div role="checkbox" class="cursor-pointer w-12 h-12 hover:shadow-inner transition-all bg-green-100 border-green-200 border-2 rounded-md mr-3 flex justify-center items-center">
+                <ng-icon size="24" name="featherCheck" class="text-green-600" />
+              </div>
+            </div>
+            <div class="font-hedvig text-gray-700 text-2xl lg:text-4xl"> {{correctAnswers}} Correct answers</div>
+            <!-- <div class="font-hedvig text-gray-700 text-lg lg:text-2xl {{updateCorrectAnswer&&'animate-pingin'}}">{{correctAnswers}}</div> -->
           </div>
-          <div class="font-hedvig text-gray-700 text-lg lg:text-2xl {{updateWrongAnswer&&'animate-pingin'}}">{{wrongAnswers}}</div>
-        </div>
 
-        <div class="flex items-center mr-4">
-          <div role="checkbox" class="cursor-pointer w-12 h-12 hover:shadow-inner transition-all bg-green-100 border-green-200 border-2 rounded-md mr-3 flex justify-center items-center">
-            <ng-icon size="24" name="featherCheck" class="text-green-600" />
+          <div class="flex items-center mr-4 ">
+            <div>
+              <div role="checkbox" class="delay-700 animate-pingin cursor-pointer w-12 h-12 hover:shadow-inner transition-all bg-red-100 border-red-200 border-2 rounded-md mr-3 flex justify-center items-center">
+                <ng-icon size="24" name="featherX" class="text-red-600" />
+              </div>
+            </div>
+            <div class="font-hedvig text-gray-700 text-2xl lg:text-4xl"> {{wrongAnswers}} Wrong answers</div>
+            <!-- <div class="font-hedvig text-gray-700 text-lg lg:text-2xl {{updateWrongAnswer&&'animate-pingin'}}">{{wrongAnswers}}</div> -->
           </div>
-          <div class="font-hedvig text-gray-700 text-lg lg:text-2xl {{updateCorrectAnswer&&'animate-pingin'}}">{{correctAnswers}}</div>
         </div>
 
       </div>
