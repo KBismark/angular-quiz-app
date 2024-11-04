@@ -1,7 +1,7 @@
 
-<div class="rounded-lg max-w-80 lg:max-w-60 shadow-md hover:shadow-xl border-none border-opacity-30 overflow-hidden lg:mx-2 mb-8 cursor-pointer transition-shadow">
+<div role="button" (click)="setQuizType()" class="rounded-lg max-w-80 lg:max-w-60 shadow-md hover:shadow-xl border-none border-opacity-30 overflow-hidden lg:mx-2 mb-8 cursor-pointer transition-shadow">
   <div class="w-full overflow-hidden h-36">
-    <img src="assets/images/hero1.jpg" class="block w-full h-auto border-none"  />
+    <img [src]="image||'assets/images/hero1.jpg'" class="block w-full h-auto border-none"  />
   </div>
   <div class="py-5 px-4">
     <h2 class="gradient-text capitalize">{{title}}</h2>
