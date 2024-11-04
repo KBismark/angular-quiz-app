@@ -13,32 +13,37 @@ import { DomSanitizer } from "@angular/platform-browser";
   viewProviders: [provideIcons({featherCheck, featherX, featherAward})]
 })
 
-export class AnswerCard {
+export class AnswerCard implements OnChanges{
   constructor(private sanitizer: DomSanitizer){
-    let scores:any = window.localStorage.getItem('scores');
-    if(scores){
-      try {
-        scores = JSON.parse(scores);
-        this.wrongAnswers = scores.wrong;
-        this.correctAnswers = scores.correct;
+    const quizType = window.localStorage.getItem('quiztype');
+    if(typeof quizType === 'string'&&this.quizType===quizType){
+      let scores:any = window.localStorage.getItem('scores');
+      if(scores){
+        try {
+          scores = JSON.parse(scores);
+          this.wrongAnswers = scores.wrong;
+          this.correctAnswers = scores.correct;
 
-      } catch (error) {}
+        } catch (error) {}
+      }
+      let actions: any = window.localStorage.getItem('actions');
+      if(actions){
+        try {
+          actions = JSON.parse(actions);
+          this.answerConfirmed = actions.confirmed;
+          this.selectedAnswer = actions.selected;
+          this.showResults = actions.results;
+        } catch (error) {}
+      }
     }
-    let actions: any = window.localStorage.getItem('actions');
-    if(actions){
-      try {
-        actions = JSON.parse(actions);
-        this.answerConfirmed = actions.confirmed;
-        this.selectedAnswer = actions.selected;
-        this.showResults = actions.results;
-        // this.answerConfirmed&&this.selectedAnswer
-      } catch (error) {}
-    }
+
   }
   @Input({required: true})
   dismis!: boolean;
   @Input({required: true})
   initiateDismis!:boolean;
+  @Input({required: true})
+  quizType!: string;
   questionsData = input<QuestionsData>();
   question = input<Question|null>();
   nextQuestion = output<void>({alias: 'onNextQuestion'});
@@ -51,12 +56,16 @@ export class AnswerCard {
     this.selectedAnswer = '';
     this.answerConfirmed = false;
     window.localStorage.removeItem('actions');
-    // if(this.questionsData()?.isLastQuestion){
-    //   this.correctAnswers = 0;
-    //   this.wrongAnswers = 0;
-    //   this.showResults = false;
-    //   window.localStorage.removeItem('scores');
-    // }
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    const type = changes['quizType'];
+    if(type&&type.currentValue!==type.previousValue){
+      this.showResults = false;
+      this.correctAnswers = 0;
+      this.wrongAnswers = 0;
+      window.localStorage.removeItem('scores');
+      this.reset();
+    }
   }
 
   selectedAnswer: string = '';
@@ -79,7 +88,7 @@ export class AnswerCard {
   endQuiz(){
     this.showResults = false;
     this.correctAnswers = 0;
-      this.wrongAnswers = 0;
+    this.wrongAnswers = 0;
     window.localStorage.removeItem('scores');
     // this.reset()
     this.onNextQuestion()
@@ -120,7 +129,8 @@ export class AnswerCard {
   }
   selectAnswer(option: string){
     if(this.answerConfirmed) return;
-    this.selectedAnswer = option
+    this.selectedAnswer = option;
+    this.confirmAnswer()
   }
   confirmAnswer(){
     if(!this.selectedAnswer||this.answerConfirmed) return;
