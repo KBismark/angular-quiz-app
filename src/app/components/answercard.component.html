@@ -86,7 +86,7 @@
 <div *ngIf="showResults&&dismis"  class="fixed top-0 bottom-0 right-0 left-0 overflow-y-auto bg-black opacity-75 z-10">
 
 </div>
-<div *ngIf="showResults&&dismis"  class="flex flex-col justify-center items-center fixed top-0 bottom-0 right-0 left-0 z-20">
+<div role="button" (click)="endQuiz()" *ngIf="showResults&&dismis"  class="flex flex-col justify-center items-center fixed top-0 bottom-0 right-0 left-0 z-20">
   <!-- *ngIf="questionsData()?.isLastQuestion" -->
   <div class="bg-white rounded-3xl relative w-72 lg:w-[35rem] h-72 lg:h-96 animate-pingin">
     <div class="absolute inset-0 w-full h-72 lg:h-96 opacity-70">

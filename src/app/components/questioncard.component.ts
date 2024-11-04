@@ -56,7 +56,7 @@ export class QuestionCard implements OnInit, OnChanges {
   getQuestion(){
     const question = this.question();
     return this.sanitizer.bypassSecurityTrustHtml(
-      question?question.question:'No question available. Press on load new quiz...'
+      question?question.question:'No question available. Loading new quiz...'
     )
   }
 
