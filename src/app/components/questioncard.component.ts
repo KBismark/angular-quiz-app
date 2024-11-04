@@ -27,6 +27,9 @@ export class QuestionCard implements OnInit, OnChanges {
   private questionsSignal = signal<Question[]>([]);
   private loadingSignal = signal(false);
   private errorSignal = signal<string | null>(null);
+  @Input({required: true})
+  quizType!: string;
+
 
   // Computed signals for template consumption
   readonly questions = computed(() => this.questionsSignal());
@@ -42,7 +45,7 @@ export class QuestionCard implements OnInit, OnChanges {
   constructor(private http: HttpClient, private sanitizer: DomSanitizer) {}
 
   ngOnInit() {
-    this.loadQuestions();
+    // this.loadQuestions();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -61,11 +64,11 @@ export class QuestionCard implements OnInit, OnChanges {
   }
 
   private loadQuestions() {
-    if(this.question()) return;
-    this.loadingSignal.set(true);
-    this.errorSignal.set(null);
-    // alert('here')
-    this.http.get<QuizApiResponse>('https://opentdb.com/api.php?amount=10')
+    const quizType = window.localStorage.getItem('quiztype');
+    if(typeof quizType === 'string'&&this.quizType===quizType){
+      if(this.question()) return;
+    }
+    this.http.get<QuizApiResponse>(`https://opentdb.com/api.php?amount=10&category=${this.quizType}`)
       .pipe(
         map(response => {
           if (response.response_code !== 0) {
@@ -84,6 +87,7 @@ export class QuestionCard implements OnInit, OnChanges {
           if (questions) {
             // this.questionsSignal.set(questions);
             this.onQuestionsLoad.emit(questions);
+            window.localStorage.setItem('quiztype',this.quizType)
           }
           this.loadingSignal.set(false);
         },

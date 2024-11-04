@@ -88,32 +88,51 @@ export class AppComponent {
   title = 'quiz-app';
   quizOn = signal(false);
   dismisAnswerCard = false;
+  quizType = 'any'
+  onQuizTypeSelected(e: any){
+    this.quizType = e.target.value;
+  }
   onDismisQuizCard(){
     this.dismisAnswerCard = true;
   }
   setQuizStatus(state:boolean){
     if(state){
       this.dismisAnswerCard = false;
+      const quizType = window.localStorage.getItem('quiztype');
+      // alert(typeof quizType === 'string'&&this.quizType===quizType)
+      if(typeof quizType !== 'string'||this.quizType!==quizType){
+        this.currentQuestion.set(null)
+      }
     }
     this.isVisible = !state;
     this.quizOn.set(state);
   }
-  sections: {title: string; caption: string}[] =  [
+  onHomeCardPress(type:string){
+    this.quizType = type||'any';
+    this.setQuizStatus(true);
+  }
+  sections: {title: string; caption: string; image?:string; type?:string}[] =  [
     {
       title: 'Any Category',
       caption: 'Take a quiz on any field in the world to test your knowledge on global, natural and other matters.'
     },
     {
       title: 'General Knowledge',
-      caption: 'Take a quiz on any field in the world to test your knowledge on global, natural and other matters.'
+      caption: 'Your general knowledge matters! This quiz gives a set of ten questions for every session to test your knowledge.',
+       image: 'assets/images/general.jpg',
+      type: "9"
     },
     {
       title: 'Entertainment - music',
-      caption: 'Take a quiz on any field in the world to test your knowledge on global, natural and other matters.'
+      caption: 'Do you love music? Take a quiz on global music to test your knowledge in the music industry. It\'s going to be fun!',
+      image: 'assets/images/music.jpg',
+      type: "12"
     },
     {
       title: 'Entertainment - Celebrities',
-      caption: 'Take a quiz on any field in the world to test your knowledge on global, natural and other matters.'
+      caption: 'How well do you know your celebrities? Take this quiz to discover some amazing insights!',
+      image: 'assets/images/celeb.jpg',
+      type: "26"
     },
   ];
 }
