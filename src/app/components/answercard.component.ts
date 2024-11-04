@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component, computed, effect, Input, input, OnChanges, output, SimpleChanges } from "@angular/core";
 import { Question, QuestionsData } from "../interfaces";
 import { NgIconComponent, provideIcons } from "@ng-icons/core";
-import {featherCheck, featherX} from "@ng-icons/feather-icons"
+import {featherCheck, featherX, featherAward} from "@ng-icons/feather-icons"
 import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
@@ -10,7 +10,7 @@ import { DomSanitizer } from "@angular/platform-browser";
   templateUrl: './answercard.component.html',
   imports: [CommonModule, NgIconComponent],
   standalone: true,
-  viewProviders: [provideIcons({featherCheck, featherX})]
+  viewProviders: [provideIcons({featherCheck, featherX, featherAward})]
 })
 
 export class AnswerCard {
@@ -78,7 +78,11 @@ export class AnswerCard {
   }
   endQuiz(){
     this.showResults = false;
-    this.reset()
+    this.correctAnswers = 0;
+      this.wrongAnswers = 0;
+    window.localStorage.removeItem('scores');
+    // this.reset()
+    this.onNextQuestion()
   }
 
   // ngOnChanges(changes: SimpleChanges): void {

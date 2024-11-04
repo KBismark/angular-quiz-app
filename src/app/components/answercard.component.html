@@ -1,8 +1,8 @@
 <div *ngIf="dismis" class="flex flex-col justify-between lg:fixed top-0 bottom-0 right-0 lg:w-1/2 lg:mr-[-2rem] lg:overflow-y-auto {{!initiateDismis?'animate-slideleft':'animate-slideright'}} shadow-hanging border-l my-4 lg:rounded-3xl rounded-r-none">
 
   <div class="flex justify-between flex-row items-center mt-6 px-4 pr-4 lg:pr-12 pb-12 lg:pb-0">
-
-    <div class="flex items-center">
+    <div *ngIf="!question()" class="rounded-md bg-gray-200 h-11 w-2/5 animate-pulse mb-5 lg:mb-0"></div>
+    <div *ngIf="question()" class="flex items-center">
 
       <div class="flex items-center mr-4">
         <div role="checkbox" class="cursor-pointer w-12 h-12 hover:shadow-inner transition-all bg-red-100 border-red-200 border-2 rounded-md mr-3 flex justify-center items-center">
@@ -19,7 +19,8 @@
       </div>
 
     </div>
-    <div class="font-hedvig text-gray-700 text-lg lg:text-2xl"><span class="text-gray-500">{{questionsData()?.currentQuestionNumber}}</span>/{{questionsData()?.totalQuestions}}</div>
+    <div *ngIf="question()" class="font-hedvig text-gray-700 text-lg lg:text-2xl"><span class="text-gray-500">{{questionsData()?.currentQuestionNumber}}</span>/{{questionsData()?.totalQuestions}}</div>
+    <div *ngIf="!question()" class="rounded-md bg-gray-200 h-9 w-1/5 animate-pulse mb-5 lg:mb-0"></div>
 
   </div>
   <div *ngIf="question()" class="px-4">
@@ -49,7 +50,16 @@
       </div>
     }
   </div>
-  <div class="flex justify-start px-4 pr-4 lg:pr-12 items-center pt-12 lg:pt-0 pb-6">
+  <div *ngIf="!question()" class="px-4">
+    <div class="mb-3 rounded-md bg-gray-200 h-11 w-3/5 animate-pulse"></div>
+    <div class="mb-3 rounded-md bg-gray-200 h-11 w-3/5 animate-pulse"></div>
+    <div class="mb-3 rounded-md bg-gray-200 h-11 w-3/5 animate-pulse"></div>
+    <div class="mb-3 rounded-md bg-gray-200 h-11 w-3/5 animate-pulse"></div>
+  </div>
+  <div *ngIf="question()||true" class="flex justify-start px-4 pr-4 lg:pr-12 items-center pt-12 lg:pt-0 pb-6">
+    <!-- <div class="rounded-md bg-gray-200 h-11 w-2/5 animate-pulse mb-5 lg:mb-0"></div> -->
+  </div>
+  <div *ngIf="question()" class="flex justify-start px-4 pr-4 lg:pr-12 items-center pt-12 lg:pt-0 pb-6">
     <button
       *ngIf="!answerConfirmed"
       (click)="confirmAnswer()"
@@ -101,8 +111,12 @@
       <!-- <div class="font-hedvig text-center text-gray-700 text-3xl lg:text-4xl px-4 mt-[-4rem]">
 
       </div> -->
-      <div class="flex items-center justify-center flex-col mt-[-4rem]">
-        <div class="font-hedvig text-gray-700 text-3xl lg:text-5xl text-center mb-5">Your Score</div>
+      <div class="flex items-center justify-center flex-col mt-[-5rem]">
+        <div class="font-hedvig text-gray-700 text-3xl lg:text-5xl text-center mb-5 flex items-center justify-center">
+
+          <ng-icon size="24" name="featherAward" class="text-gray-600" />
+          <span class="ml-4">Your Score</span>
+        </div>
 
         <div>
           <div class="flex items-center mr-4 mb-5">
